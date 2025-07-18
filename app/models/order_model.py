@@ -7,9 +7,14 @@ class Order(db.Model):
     order_date = db.Column(db.String(150),nullable = False)
     total_amount = db.Column(db.String(22), nullable=False, default="UGX")
     status = db.Column(db.Text(),nullable = False)
+    userId = db.Column(db.Integer, db.ForeignKey("users.userId"))  # Ensure correct table name
     customerId = db.Column(db.Integer, db.ForeignKey("customers.customerId"))  # Ensure correct table name
-    vendor = db.relationship("Vendor", backref="orders")
+
+    user = db.relationship("User", backref="orders")
     customer = db.relationship("Customer", backref="orders")
+    order_items = db.relationship("OrderItem", backref="order", lazy=True)
+
+
     created_at = db.Column(db.DateTime,default=datetime.now())
     updated_at = db.Column(db.DateTime,onupdate=datetime.now())
 

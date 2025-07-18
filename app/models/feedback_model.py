@@ -8,7 +8,7 @@ class Feedback(db.Model):
     rating= db.Column(db.Integer,nullable = False)
     feedback_date = db.Column(db.Date,nullable = False)
     customerId = db.Column(db.Integer, db.ForeignKey("customers.customerId"))  # Ensure correct table 
-    vendorId = db.Column(db.Integer, db.ForeignKey("vendors.vendorId"))
+    vendorId = db.Column(db.Integer, db.ForeignKey("users.userId"))
     created_at = db.Column(db.DateTime,default=datetime.now())
     updated_at = db.Column(db.DateTime,onupdate=datetime.now())
 

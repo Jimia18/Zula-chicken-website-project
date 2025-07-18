@@ -7,7 +7,7 @@ class Review(db.Model):
     reviewId = db.Column(db.Integer, primary_key=True, nullable=False)
     customerId = db.Column(db.Integer, db.ForeignKey("customers.customerId"), nullable=False)
     menuItemId = db.Column(db.Integer, db.ForeignKey("menuItems.menuItemId"), nullable=False)
-    vendorId = db.Column(db.Integer, db.ForeignKey("vendors.vendorId"), nullable=False)
+    vendorId = db.Column(db.Integer, db.ForeignKey("users.userId"), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     comment = db.Column(db.Text(), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.now())

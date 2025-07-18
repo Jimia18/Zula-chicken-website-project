@@ -1,8 +1,8 @@
 """initial migration
 
-Revision ID: 627a744c5114
+Revision ID: 01c4ab472161
 Revises: 
-Create Date: 2025-07-02 15:07:14.498676
+Create Date: 2025-07-18 15:27:42.535679
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '627a744c5114'
+revision = '01c4ab472161'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -42,19 +42,20 @@ def upgrade():
     sa.PrimaryKeyConstraint('menuItemId'),
     sa.UniqueConstraint('item_category')
     )
-    op.create_table('vendors',
-    sa.Column('vendorId', sa.Integer(), nullable=False),
-    sa.Column('vendor_name', sa.String(length=150), nullable=False),
-    sa.Column('email', sa.String(length=150), nullable=False),
-    sa.Column('phone_number', sa.String(length=150), nullable=False),
+    op.create_table('users',
+    sa.Column('userId', sa.Integer(), nullable=False),
+    sa.Column('username', sa.String(length=50), nullable=False),
+    sa.Column('email', sa.String(length=100), nullable=False),
+    sa.Column('contact', sa.String(length=50), nullable=False),
+    sa.Column('image', sa.String(length=255), nullable=True),
     sa.Column('password', sa.Text(), nullable=False),
-    sa.Column('location', sa.Text(), nullable=False),
-    sa.Column('description', sa.Text(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.PrimaryKeyConstraint('vendorId'),
-    sa.UniqueConstraint('email'),
-    sa.UniqueConstraint('phone_number')
+    sa.Column('biography', sa.Text(), nullable=False),
+    sa.Column('userType', sa.String(length=20), nullable=False),
+    sa.Column('createdAt', sa.DateTime(), nullable=True),
+    sa.Column('updatedAt', sa.DateTime(), nullable=True),
+    sa.PrimaryKeyConstraint('userId'),
+    sa.UniqueConstraint('contact'),
+    sa.UniqueConstraint('email')
     )
     op.create_table('cartItems',
     sa.Column('cartItemId', sa.Integer(), nullable=False),
@@ -91,10 +92,12 @@ def upgrade():
     sa.Column('order_date', sa.String(length=150), nullable=False),
     sa.Column('total_amount', sa.String(length=22), nullable=False),
     sa.Column('status', sa.Text(), nullable=False),
+    sa.Column('userId', sa.Integer(), nullable=True),
     sa.Column('customerId', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['customerId'], ['customers.customerId'], ),
+    sa.ForeignKeyConstraint(['userId'], ['users.userId'], ),
     sa.PrimaryKeyConstraint('orderId')
     )
     op.create_table('reviews',
@@ -108,7 +111,7 @@ def upgrade():
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['customerId'], ['customers.customerId'], ),
     sa.ForeignKeyConstraint(['menuItemId'], ['menuItems.menuItemId'], ),
-    sa.ForeignKeyConstraint(['vendorId'], ['vendors.vendorId'], ),
+    sa.ForeignKeyConstraint(['vendorId'], ['users.userId'], ),
     sa.PrimaryKeyConstraint('reviewId')
     )
     op.create_table('deliveries',
@@ -159,7 +162,7 @@ def downgrade():
     op.drop_table('contactMessages')
     op.drop_table('carts')
     op.drop_table('cartItems')
-    op.drop_table('vendors')
+    op.drop_table('users')
     op.drop_table('menuItems')
     op.drop_table('customers')
     # ### end Alembic commands ###
